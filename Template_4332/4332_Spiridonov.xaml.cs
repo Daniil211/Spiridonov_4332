@@ -164,7 +164,7 @@ namespace Template_4332
             var group1 = data.Where(p => new[] { "120 минут", "600 минут", "320 минут", "480 минут" }.Contains(p.ProkatTime));
             var group2 = data.Where(p => new[] { "2 часа", "4 часа", "6 часов", "10 часов", "12 часов" }.Contains(p.ProkatTime));
 
-            string fileName = "output_" + DateTime.Now.ToString("dd.MM.yyyy_ss.mm.HH") + ".docx";
+            string fileName = "output_" + DateTime.Now.ToString("dd.MM.HH.mm.ss") + ".docx";
             using (WordprocessingDocument doc = WordprocessingDocument.Create(fileName, WordprocessingDocumentType.Document))
             {
                 if (doc.MainDocumentPart == null)// Создаем новую часть документа, если она еще не была создана
