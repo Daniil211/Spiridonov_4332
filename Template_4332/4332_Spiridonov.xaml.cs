@@ -152,7 +152,7 @@ namespace Template_4332
             MessageBox.Show("Complete");
         }
         #endregion
-
+        #region Экспорт в Word лр3
         private void exportWord_Click(object sender, RoutedEventArgs e)
         {
             List<Order> data = new List<Order>();
@@ -229,5 +229,6 @@ namespace Template_4332
 
             return table;
         }
+#endregion
     }
 }
