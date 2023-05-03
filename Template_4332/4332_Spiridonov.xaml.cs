@@ -107,21 +107,21 @@ namespace Template_4332
 
         }
         #endregion
-        public static List<EntityModel2> LoadOrdersFromJsonFile(string filePath)
+        public static List<Order> LoadOrdersFromJsonFile(string filePath)
         {
             using (StreamReader reader = new StreamReader(filePath))
             {
                 string json = reader.ReadToEnd();
-                return JsonConvert.DeserializeObject<List<EntityModel2>>(json);
+                return JsonConvert.DeserializeObject<List<Order>>(json);
             }
         }
-        public static void SaveOrdersToDatabase(List<EntityModel2> orders)
+        public static void SaveOrdersToDatabase(List<Order> orders)
         {
-            using (var context = new ModelExcelContainer())
+            using (var context = new OrderContext())
             {
                 foreach (var order in orders)
                 {
-                    context.EntityModel2Set.Add(order);
+                    context.Orders.Add(order);
                 }
                 try
                 {
@@ -142,7 +142,7 @@ namespace Template_4332
         private void importJSON_Click(object sender, RoutedEventArgs e)
         {
             string filePath = "C:\\Users\\id202\\Desktop\\3 курс\\ИСРПО\\Импорт\\2.json";
-            List<EntityModel2> orders = LoadOrdersFromJsonFile(filePath);
+            List<Order> orders = LoadOrdersFromJsonFile(filePath);
             SaveOrdersToDatabase(orders);
             MessageBox.Show("Complete");
         }

@@ -24,7 +24,7 @@
         <Button Grid.Column="0" x:Name="import" Width="109" Height="30" VerticalAlignment="Center" Background="Bisque" Content="Импорт данных" Click="import_Click" Margin="145,0,146,0" Grid.Row="1"></Button>
         <Button Grid.Column="1" x:Name="export" Width="109" Height="30" Background="Bisque" Content="Экспорт в Excel" Margin="145,0,146,0" Grid.Row="1" Click="export_Click" />
         <Label HorizontalAlignment="Left" VerticalAlignment="Center" Height="26" Width="108" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.ColumnSpan="2" Margin="346,0,0,0" Grid.Row="2">Лр3</Label>
-        <Button Grid.Column="0" x:Name="importJSON" Width="109" Height="30" VerticalAlignment="Center" Background="Bisque" Content="Импорт JSON данных" Margin="145,0,146,0" Grid.Row="3" Click="importJSON_Click"></Button>
-        <Button Grid.Column="1" x:Name="exportWord" Width="109" Height="30" Background="Bisque" Content="Экспорт в Word" Margin="145,0,146,0" Grid.Row="3" />
+        <Button Grid.Column="0" x:Name="importJSON" Height="30" VerticalAlignment="Center" Background="Bisque" Content="Импорт JSON данных" Margin="125,0,126,0" Grid.Row="3" Click="importJSON_Click"/>
+        <Button Grid.Column="1" x:Name="exportWord" Width="109" Height="30" Background="Bisque" Content="Экспорт в Word" Margin="145,0,146,0" Grid.Row="3" Click="exportWord_Click" />
     </Grid>
 </Window>
