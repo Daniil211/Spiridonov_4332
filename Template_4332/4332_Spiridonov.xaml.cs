@@ -107,6 +107,7 @@ namespace Template_4332
 
         }
         #endregion
+        #region Импорт JSON данных лр3
         public static List<Order> LoadOrdersFromJsonFile(string filePath)
         {
             using (StreamReader reader = new StreamReader(filePath))
@@ -145,6 +146,12 @@ namespace Template_4332
             List<Order> orders = LoadOrdersFromJsonFile(filePath);
             SaveOrdersToDatabase(orders);
             MessageBox.Show("Complete");
+        }
+        #endregion
+
+        private void exportWord_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
