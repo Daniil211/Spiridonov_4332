@@ -7,6 +7,10 @@ using Excel = Microsoft.Office.Interop.Excel;
 using Newtonsoft.Json;
 using System.IO;
 using System.Data.Entity.Validation;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Wordprocessing;
+using DocumentFormat.OpenXml;
+using System.Data.Entity;
 
 namespace Template_4332
 {
@@ -151,7 +155,79 @@ namespace Template_4332
 
         private void exportWord_Click(object sender, RoutedEventArgs e)
         {
+            List<Order> data = new List<Order>();
+            using (var context = new OrderContext())
+            {
+                data = context.Orders.ToList();
+            }
 
+            var group1 = data.Where(p => new[] { "120 минут", "600 минут", "320 минут", "480 минут" }.Contains(p.ProkatTime));
+            var group2 = data.Where(p => new[] { "2 часа", "4 часа", "6 часов", "10 часов", "12 часов" }.Contains(p.ProkatTime));
+
+            string fileName = "output_" + DateTime.Now.ToString("dd.MM.yyyy_ss.mm.HH") + ".docx";
+            using (WordprocessingDocument doc = WordprocessingDocument.Create(fileName, WordprocessingDocumentType.Document))
+            {
+                if (doc.MainDocumentPart == null)// Создаем новую часть документа, если она еще не была создана
+                {
+                    doc.AddMainDocumentPart();
+                }
+                if (doc.MainDocumentPart.Document == null)
+                {
+                    doc.MainDocumentPart.Document = new Document();
+                }
+                Body body = new Body();
+                SectionProperties sectionProperties = new SectionProperties();
+                body.Append(sectionProperties);
+
+                doc.MainDocumentPart.Document.Body = body;
+                Paragraph text = new Paragraph(new Run(new Text("Данные по продолжительности проката (формат минут):")));
+                body.Append(text);
+
+                Table table1 = CreateTable(group1);
+                body.Append(table1);
+
+                Paragraph para = new Paragraph(new Run(new Break() { Type = BreakValues.Page }));
+                body.Append(para);
+
+                Paragraph text2 = new Paragraph(new Run(new Text("Данные по продолжительности проката (формат часы):")));
+                body.Append(text2);
+
+                Table table2 = CreateTable(group2);
+                body.Append(table2);
+
+                Paragraph dates = new Paragraph(new Run(new Text("Дата первого заказа: " + data.Min(p => DateTime.Parse(p.CreateDate))
+                    .ToString("dd.MM.yyyy") + ", дата последнего заказа: " + data.Max(p => DateTime
+                    .Parse(p.CreateDate)).ToString("dd.MM.yyyy"))));
+                body.Append(dates);
+
+                doc.MainDocumentPart.Document.Save();
+            }
+            MessageBox.Show("Complete");
+        }
+        static Table CreateTable(IEnumerable<Order> data)
+        {
+            Table table = new Table();
+
+            TableRow headerRow = new TableRow();
+            headerRow.Append(new TableCell(new Paragraph(new Run(new Text("Id")))));
+            headerRow.Append(new TableCell(new Paragraph(new Run(new Text("Код заказа")))));
+            headerRow.Append(new TableCell(new Paragraph(new Run(new Text("Дата создания")))));
+            headerRow.Append(new TableCell(new Paragraph(new Run(new Text("Код клиента")))));
+            headerRow.Append(new TableCell(new Paragraph(new Run(new Text("Услуги")))));
+            table.Append(headerRow);
+
+            foreach (Order item in data)
+            {
+                TableRow row = new TableRow();
+                row.Append(new TableCell(new Paragraph(new Run(new Text(item.Id.ToString())))));
+                row.Append(new TableCell(new Paragraph(new Run(new Text(item.CodeOrder)))));
+                row.Append(new TableCell(new Paragraph(new Run(new Text(item.CreateDate + " " + item.CreateTime))))); 
+                row.Append(new TableCell(new Paragraph(new Run(new Text(item.CodeClient)))));
+                row.Append(new TableCell(new Paragraph(new Run(new Text(item.Services)))));
+                table.Append(row);
+            }
+
+            return table;
         }
     }
 }
