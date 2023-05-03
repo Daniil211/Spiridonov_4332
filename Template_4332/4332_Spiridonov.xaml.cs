@@ -1,23 +1,12 @@
-﻿using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using Excel = Microsoft.Office.Interop.Excel;
-using System.Data.Entity;
-using System.Runtime.Remoting.Contexts;
-using Microsoft.Office.Interop.Excel;
-using System.Data.SqlClient;
-
+using Newtonsoft.Json;
+using System.IO;
+using System.Data.Entity.Validation;
 
 namespace Template_4332
 {
@@ -32,7 +21,7 @@ namespace Template_4332
         {
             InitializeComponent();
         }
-
+        #region Импорт лр2
         private void import_Click(object sender, RoutedEventArgs e)
         {
             string[,] list;
@@ -66,6 +55,8 @@ namespace Template_4332
                 MessageBox.Show("Данные импортированы");
             }
         }
+        #endregion
+        #region Экспорт лр2
         private void ExportToWorksheet(IEnumerable<EntityModel2> data, Excel.Worksheet ws, string wsName)
         {
             int Row = 1;
@@ -114,6 +105,46 @@ namespace Template_4332
             MessageBox.Show("Файл создан");
             app.Visible = true;
 
+        }
+        #endregion
+        public static List<EntityModel2> LoadOrdersFromJsonFile(string filePath)
+        {
+            using (StreamReader reader = new StreamReader(filePath))
+            {
+                string json = reader.ReadToEnd();
+                return JsonConvert.DeserializeObject<List<EntityModel2>>(json);
+            }
+        }
+        public static void SaveOrdersToDatabase(List<EntityModel2> orders)
+        {
+            using (var context = new ModelExcelContainer())
+            {
+                foreach (var order in orders)
+                {
+                    context.EntityModel2Set.Add(order);
+                }
+                try
+                {
+                    context.SaveChanges();
+                }
+                catch (DbEntityValidationException ex)
+                {
+                    foreach (var error in ex.EntityValidationErrors)
+                    {
+                        foreach (var validationError in error.ValidationErrors)
+                        {
+                            MessageBox.Show($"Property: {validationError.PropertyName} Error: {validationError.ErrorMessage}");
+                        }
+                    }
+                }
+            }
+        }
+        private void importJSON_Click(object sender, RoutedEventArgs e)
+        {
+            string filePath = "C:\\Users\\id202\\Desktop\\3 курс\\ИСРПО\\Импорт\\2.json";
+            List<EntityModel2> orders = LoadOrdersFromJsonFile(filePath);
+            SaveOrdersToDatabase(orders);
+            MessageBox.Show("Complete");
         }
     }
 }
