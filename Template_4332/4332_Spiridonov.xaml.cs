@@ -161,13 +161,20 @@ namespace Template_4332
                 data = context.Orders.ToList();
             }
 
-            var group1 = data.Where(p => new[] { "120 минут", "600 минут", "320 минут", "480 минут" }.Contains(p.ProkatTime));
-            var group2 = data.Where(p => new[] { "2 часа", "4 часа", "6 часов", "10 часов", "12 часов" }.Contains(p.ProkatTime));
+            var group1 = data.Where(p => new[] { "120 минут" }.Contains(p.ProkatTime));
+            var group2 = data.Where(p => new[] { "600 минут" }.Contains(p.ProkatTime));
+            var group3 = data.Where(p => new[] { "320 минут" }.Contains(p.ProkatTime));
+            var group4 = data.Where(p => new[] { "480 минут" }.Contains(p.ProkatTime));
+            var group5 = data.Where(p => new[] { "2 часа" }.Contains(p.ProkatTime));
+            var group6 = data.Where(p => new[] { "4 часа" }.Contains(p.ProkatTime));
+            var group7 = data.Where(p => new[] { "6 часов" }.Contains(p.ProkatTime));
+            var group8 = data.Where(p => new[] { "10 часов" }.Contains(p.ProkatTime));
+            var group9 = data.Where(p => new[] { "12 часов" }.Contains(p.ProkatTime));
 
             string fileName = "output_" + DateTime.Now.ToString("dd.MM.HH.mm.ss") + ".docx";
             using (WordprocessingDocument doc = WordprocessingDocument.Create(fileName, WordprocessingDocumentType.Document))
             {
-                if (doc.MainDocumentPart == null)// Создаем новую часть документа, если она еще не была создана
+                if (doc.MainDocumentPart == null)
                 {
                     doc.AddMainDocumentPart();
                 }
@@ -180,7 +187,8 @@ namespace Template_4332
                 body.Append(sectionProperties);
 
                 doc.MainDocumentPart.Document.Body = body;
-                Paragraph text = new Paragraph(new Run(new Text("Данные по продолжительности проката (формат минут):")));
+                //
+                Paragraph text = new Paragraph(new Run(new Text("120 минут:")));
                 body.Append(text);
 
                 Table table1 = CreateTable(group1);
@@ -188,12 +196,81 @@ namespace Template_4332
 
                 Paragraph para = new Paragraph(new Run(new Break() { Type = BreakValues.Page }));
                 body.Append(para);
-
-                Paragraph text2 = new Paragraph(new Run(new Text("Данные по продолжительности проката (формат часы):")));
+                //
+                Paragraph text2 = new Paragraph(new Run(new Text("600 минут:")));
                 body.Append(text2);
 
                 Table table2 = CreateTable(group2);
                 body.Append(table2);
+
+                Paragraph para2 = new Paragraph(new Run(new Break() { Type = BreakValues.Page }));
+                body.Append(para2);
+                //
+                Paragraph text11 = new Paragraph(new Run(new Text("320 минут:")));
+                body.Append(text11);
+
+                Table table11= CreateTable(group3);
+                body.Append(table11);
+
+                Paragraph para11 = new Paragraph(new Run(new Break() { Type = BreakValues.Page }));
+                body.Append(para11);
+                //
+                Paragraph text12 = new Paragraph(new Run(new Text("480 минут:")));
+                body.Append(text12);
+
+                Table table12 = CreateTable(group4);
+                body.Append(table12);
+
+                Paragraph para12 = new Paragraph(new Run(new Break() { Type = BreakValues.Page }));
+                body.Append(para12);
+                //
+                Paragraph text13 = new Paragraph(new Run(new Text("2 часа :")));
+                body.Append(text13);
+
+                Table table14 = CreateTable(group5);
+                body.Append(table14);
+
+                Paragraph para15 = new Paragraph(new Run(new Break() { Type = BreakValues.Page }));
+                body.Append(para15);
+                //
+                Paragraph text16 = new Paragraph(new Run(new Text("4 часа:")));
+                body.Append(text16);
+
+                Table table16 = CreateTable(group6);
+                body.Append(table16);
+
+                Paragraph para16 = new Paragraph(new Run(new Break() { Type = BreakValues.Page }));
+                body.Append(para16);
+                //
+                Paragraph text17 = new Paragraph(new Run(new Text("6 часов:")));
+                body.Append(text17);
+
+                Table table17 = CreateTable(group7);
+                body.Append(table17);
+
+                Paragraph para17 = new Paragraph(new Run(new Break() { Type = BreakValues.Page }));
+                body.Append(para17);
+                //
+                Paragraph text18 = new Paragraph(new Run(new Text("10 часов:")));
+                body.Append(text18);
+
+                Table table19 = CreateTable(group8);
+                body.Append(table19);
+
+                Paragraph para19 = new Paragraph(new Run(new Break() { Type = BreakValues.Page }));
+                body.Append(para19);
+                //
+                Paragraph text20 = new Paragraph(new Run(new Text("12 часов:")));
+                body.Append(text20);
+
+                Table table20 = CreateTable(group9);
+                body.Append(table20);
+
+                Paragraph para20 = new Paragraph(new Run(new Break() { Type = BreakValues.Page }));
+                body.Append(para20);
+                //
+
+
 
                 Paragraph dates = new Paragraph(new Run(new Text("Дата первого заказа: " + data.Min(p => DateTime.Parse(p.CreateDate))
                     .ToString("dd.MM.yyyy") + ", дата последнего заказа: " + data.Max(p => DateTime
